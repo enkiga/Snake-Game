@@ -1,11 +1,12 @@
-// Get elements from the DOM by ID
-// Canvas
+// ==============================
+// 🎮 Snake Game Logic
+// ==============================
+
+// ===== Canvas Setup =====
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Give canvas border
-
-// Represent the snake as an array of objects
+// ===== Game State Variables =====
 let snake = [
   { x: 150, y: 150 },
   { x: 140, y: 150 },
@@ -14,57 +15,76 @@ let snake = [
   { x: 110, y: 150 },
 ];
 
-// Function to draw the snake
-const drawSnakePart = (snakePart) => {
+let dx = 10;
+let dy = 0;
+let score = 0;
+let food = generateFood(); // Initial food
+
+// ==============================
+// 🐍 Draw Functions
+// ==============================
+
+// Draw individual snake part
+const drawSnakePart = (part) => {
   ctx.fillStyle = "var(--snake-color)";
   ctx.strokeStyle = "darkgreen";
-  ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
-  ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
+  ctx.fillRect(part.x, part.y, 10, 10);
+  ctx.strokeRect(part.x, part.y, 10, 10);
 };
 
+// Draw the entire snake
 const drawSnake = () => {
   snake.forEach(drawSnakePart);
 };
 
-// Function to update snake movement
-const advanceSnake = () => {
-  const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-  snake.unshift(head);
-  snake.pop();
+// Draw food
+const drawFood = () => {
+  ctx.fillStyle = "var(--food-color)";
+  ctx.strokeStyle = "darkred";
+  ctx.fillRect(food.x, food.y, 10, 10);
+  ctx.strokeRect(food.x, food.y, 10, 10);
 };
 
-// Refactoring code to handle key presses
+// Clear canvas before redrawing
 const clearCanvas = () => {
-  ctx.fillStyle = "var(--canvas-color)";
-  ctx.strokeStyle = "var(--canvas-border-color)";
+  ctx.fillStyle = "var(--canvas-background)"; // FIX: corrected variable name
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 };
 
-// Make snake move automatically
-const gameLoop = () => {
-  clearCanvas();
-  drawSnake();
-  advanceSnake();
+// ==============================
+// 🐾 Snake Movement
+// ==============================
+
+const advanceSnake = () => {
+  const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+  snake.unshift(head);
+
+  // Check food collision
+  if (head.x === food.x && head.y === food.y) {
+    score += 10;
+    document.getElementById("scoreDisplay").innerText = `Score: ${score}`;
+    food = generateFood();
+  } else {
+    snake.pop();
+  }
 };
 
-// Add delay for the game loop
-const main = () => {
-  setTimeout(() => {
-    gameLoop();
-    main();
-  }, 100);
-};
+// ==============================
+// 🎮 Controls
+// ==============================
 
 const changeDirection = (event) => {
   const LEFT_KEY = 37;
   const UP_KEY = 38;
   const RIGHT_KEY = 39;
   const DOWN_KEY = 40;
+
   const keyPressed = event.keyCode;
   const goingUp = dy === -10;
   const goingDown = dy === 10;
   const goingRight = dx === 10;
   const goingLeft = dx === -10;
+
   if (keyPressed === LEFT_KEY && !goingRight) {
     dx = -10;
     dy = 0;
@@ -83,17 +103,74 @@ const changeDirection = (event) => {
   }
 };
 
-// Connect the keydown event to the changeDirection function
 document.addEventListener("keydown", changeDirection);
 
-// Initialize the direction of the snake
-let dx = 10;
-let dy = 0;
+// ==============================
+// 🍎 Food Generator
+// ==============================
 
-// Set the canvas size
-canvas.width = 400;
-canvas.height = 400;
-// Set the canvas border
-canvas.style.border = "2px solid var(--canvas-border-color)";
-// Start the game loop
-main();
+const randomTen = (min, max) => {
+  return Math.round((Math.random() * (max - min) + min) / 10) * 10;
+};
+
+const generateFood = () => {
+  let newFood;
+  while (true) {
+    newFood = {
+      x: randomTen(0, canvas.width - 10),
+      y: randomTen(0, canvas.height - 10),
+    };
+    // Make sure food doesn't spawn on the snake
+    const isOnSnake = snake.some(
+      (part) => part.x === newFood.x && part.y === newFood.y
+    );
+    if (!isOnSnake) break;
+  }
+  return newFood;
+};
+
+// ==============================
+// 💀 Game Over Logic
+// ==============================
+
+const didGameEnd = () => {
+  // Check self-collision
+  for (let i = 4; i < snake.length; i++) {
+    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+      return true;
+    }
+  }
+
+  // Check wall collision
+  const hitLeft = snake[0].x < 0;
+  const hitRight = snake[0].x >= canvas.width;
+  const hitTop = snake[0].y < 0;
+  const hitBottom = snake[0].y >= canvas.height;
+
+  return hitLeft || hitRight || hitTop || hitBottom;
+};
+
+// ==============================
+// 🕹️ Main Game Loop
+// ==============================
+
+const gameLoop = () => {
+  if (didGameEnd()) {
+    alert(`Game Over! Your score was: ${score}`);
+    document.location.reload();
+    return;
+  }
+
+  setTimeout(() => {
+    clearCanvas();
+    drawFood();
+    advanceSnake();
+    drawSnake();
+    gameLoop();
+  }, 100);
+};
+
+// ==============================
+// 🚀 Start Game
+// ==============================
+gameLoop();
