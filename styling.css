@@ -1,0 +1,22 @@
+/* Variables */
+:root {
+    --canvas-background: #000;
+    --snake-color: #0f0;
+    --food-color: #f00;
+}
+
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #222;
+}
+
+canvas {
+    background-color: var(--canvas-background);
+    border: 1px solid #fff;
+}
