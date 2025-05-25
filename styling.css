@@ -10,13 +10,24 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     background-color: #222;
 }
 
+h1 {
+    color: #fff;
+    margin-bottom: 20px;
+}
+
 canvas {
     background-color: var(--canvas-background);
     border: 1px solid #fff;
+}
+
+/* Snake Styles */
+.snake {
+    fill: var(--snake-color);
 }
