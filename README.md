@@ -21,8 +21,8 @@ A simple yet engaging Snake game built using **HTML5 Canvas**, **CSS**, and **Va
 2. Open `index.html` in your preferred browser.
 
 ```bash
-git clone https://github.com/yourusername/snake-canvas-game.git
-cd snake-canvas-game
+git clone https://github.com/enkiga/Snake-Game.git
+cd Snake-Game
 open index.html
 ```
 
