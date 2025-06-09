@@ -1,55 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snake Game</title>
-    <meta name="description"
-        content="A simple snake game built with HTML, CSS, and JavaScript. Use arrow keys or touch controls to play.">
+    <meta name="description" content="A modern snake game with difficulty levels and bonus scores.">
     <meta name="keywords" content="snake game, HTML, CSS, JavaScript, game, arcade">
-    <meta name="author" content="Enoch Garoli">
-    <meta name="theme-color" content="#4CAF50">
+    <meta name="author" content="Your Name">
+    <meta name="theme-color" content="#317873">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="styling.css">
 </head>
-
 <body>
-    <h1>Snake Game</h1>
-    <div id="scoreDisplay" class="score">Score: 0</div>
-    <canvas id="gameCanvas" width="300" height="300"></canvas>
-
-    <div class="controls">
-        <button id="startBtn" class="startBtn">Start Game</button>
-        <button id="helpBtn" class="helpBtn">❓ Help</button>
-    </div>
-
-    <div id="touchControls" class="touchControls">
-        <button onclick="setDirection('up')">⬆️</button>
-        <div>
-            <button onclick="setDirection('left')">⬅️</button>
-            <button onclick="setDirection('down')">⬇️</button>
-            <button onclick="setDirection('right')">➡️</button>
+    <div class="game-container">
+        <h1>Snake</h1>
+        <div class="game-header">
+            <div id="scoreDisplay" class="score">Score: 0</div>
+            <div id="difficultyDisplay" class="difficulty">Difficulty: Medium</div>
         </div>
+        <canvas id="gameCanvas" width="300" height="300"></canvas>
+
+        <div id="game-controls" class="controls">
+            <button id="startBtn">Start Game</button>
+            <div id="difficulty-selector" class="difficulty-selector">
+                <button data-difficulty="easy">Easy</button>
+                <button data-difficulty="medium" class="active">Medium</button>
+                <button data-difficulty="hard">Hard</button>
+            </div>
+        </div>
+
+        <div id="touch-controls" class="touch-controls">
+            <button class="control-btn" onclick="setDirection('up')">▲</button>
+            <div>
+                <button class="control-btn" onclick="setDirection('left')">◀</button>
+                <button class="control-btn" onclick="setDirection('down')">▼</button>
+                <button class="control-btn" onclick="setDirection('right')">▶</button>
+            </div>
+        </div>
+        <p class="instructions">Use arrow keys or on-screen buttons to move. Press 'Space' to pause.</p>
     </div>
 
-    <div id="helpModal" class="modal hidden">
-        <div class="modal-content">
-            <h2>How to Play</h2>
-            <ul>
-                <li>Use arrow keys or swipe/tap buttons to move.</li>
-                <li>Eat red squares to gain score.</li>
-                <li>Don’t run into walls or yourself.</li>
-                <li>Press <strong>Space</strong> to pause/resume.</li>
-            </ul>
-            <button onclick="closeHelp()">Close</button>
+    <div id="game-over-modal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <h2>Game Over</h2>
+            <p>Your final score is: <span id="finalScore">0</span></p>
+            <button id="restartBtn">Play Again</button>
         </div>
     </div>
 
     <audio id="eatSound" src="https://freesound.org/data/previews/341/341695_5260877-lq.mp3"></audio>
+    <audio id="bonusSound" src="https://freesound.org/data/previews/270/270319_5123851-lq.mp3"></audio>
     <audio id="gameOverSound" src="https://freesound.org/data/previews/458/458121_8386274-lq.mp3"></audio>
 
     <script src="script.js"></script>
 </body>
-
 </html>

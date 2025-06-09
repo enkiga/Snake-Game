@@ -1,101 +1,160 @@
 :root {
-  --bacground-color: #222;
-  --canvas-background: #000;
-  --snake-color: #0f0;
-  --food-color: #f00;
-  --game-over-color: #f00;
-  --score-color: #fff;
-  --button-color: #28a745;
-  --button-hover-color: #218838;
-  --button-active-color: #1e7e34;
-  --button-text-color: #fff;
+    --background-color: #1a1a1a;
+    --game-container-bg: #2a2a2a;
+    /* --- COLOR CHANGES --- */
+    --canvas-background: #111;      /* Softer, very dark grey instead of pure black */
+    --snake-color: #00d9ff;         /* A vibrant, highly visible cyan */
+    --snake-border-color: #008fad;  /* A darker cyan for a clear border */
+    /* --- END CHANGES --- */
+    --food-color: #ff4136;
+    --bonus-food-color: #ffd700;
+    --text-color: #f0f0f0;
+    --button-bg: #317873;
+    --button-hover-bg: #418a84;
+    --button-active-bg: #265e5a;
+    --border-color: #444;
 }
 
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
-  background-color: var(--bacground-color);
-  overflow: hidden;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.game-container {
+    background-color: var(--game-container-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    text-align: center;
 }
 
 h1 {
-  color: #fff;
-  margin-bottom: 16px;
+    margin: 0 0 10px 0;
+    font-size: 2.5em;
+    color: #f0f0f0; /* Changed from snake color for better readability */
+    text-shadow: none;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 1.1em;
 }
 
 canvas {
-  background-color: var(--canvas-background);
-  border: 1px solid #fff;
+    background-color: var(--canvas-background);
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
 }
 
-.score {
-  color: #fff;
-  font-size: 16px;
-  margin-bottom: 10px;
+.controls, .touch-controls {
+    margin-top: 20px;
 }
 
-.controls {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
+#startBtn, .difficulty-selector button {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: var(--text-color);
+    background-color: var(--button-bg);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.startBtn,
-.helpBtn {
-  padding: 10px 20px;
-  font-size: 16px;
-  color: var(--button-text-color);
-  background-color: var(--button-color);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+#startBtn:hover, .difficulty-selector button:hover {
+    background-color: var(--button-hover-bg);
 }
 
-.startBtn:hover,
-.helpBtn:hover {
-  background-color: var(--button-hover-color);
+#startBtn:active, .difficulty-selector button.active {
+    background-color: var(--button-active-bg);
 }
 
-.startBtn:active,
-.helpBtn:active {
-  background-color: var(--button-active-color);
+.difficulty-selector {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
 }
 
-#touchControls {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
+.touch-controls {
+    display: none;
 }
 
-#touchControls button {
-  font-size: 24px;
-  padding: 10px 20px;
+.control-btn {
+    font-size: 24px;
+    padding: 10px 20px;
+    background: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.instructions {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 .modal {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background: #fff;
-  padding: 16px;
-  border-radius: 8px;
-  display: none;
-  z-index: 100;
+    background: var(--game-container-bg);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid var(--border-color);
 }
 
-.modal-content {
-  font-size: 14px;
-  color: #000;
+.modal h2 {
+    margin-top: 0;
+    color: var(--food-color);
 }
 
-.modal.visible {
-  display: block;
+#restartBtn {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: var(--text-color);
+    background-color: var(--button-bg);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+    body {
+        align-items: flex-start;
+        padding-top: 20px;
+    }
+    .game-container {
+        width: 100%;
+        max-width: 340px;
+        padding: 15px;
+    }
+    .touch-controls {
+        display: block;
+    }
+    .instructions {
+        display: none;
+    }
 }
